@@ -1,18 +1,17 @@
 import { expect, test } from '@playwright/test'
 
+const {apiKey, offset} = require('./common.js')
+
 test('Current Matches', async ({ request }) => {
 
-    const currentMatches = await request.get('https://api.cricapi.com/v1/currentMatches?apikey=700b0f94-86ad-4cb6-8fb9-3be3fb29d71f&offset=0', {
+   const baseUrl = new URL('https://api.cricapi.com/v1/currentMatches')
 
-        // data: {
+   baseUrl.searchParams.append('apikey', apiKey)
+   baseUrl.searchParams.append('offset', offset)
 
-        //     apikey: '700b0f94-86ad-4cb6-8fb9-3be3fb29d71f',
-        //     offset: 0
-        // }
-    })
+   const currentMatch = await request.get(baseUrl.toString())
 
-    const res = await currentMatches.json()
-    expect(currentMatches.status()).toBe(200) 
-    console.log(res.data[0].id)
-
+   const res = await currentMatch.json()
+   expect(currentMatch.status()).toBe(200)
+   console.log(res.data[1].id)
 })
